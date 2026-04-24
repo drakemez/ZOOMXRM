@@ -1,0 +1,33 @@
+# Fly.io configuration for the Roadmaster × Zoom executive brief.
+# Rename `app` before first deploy (or let `fly launch` do it for you).
+
+app = "roadmaster-zoom-brief"
+primary_region = "iad"   # US-East. Change if you'd rather serve from "sjc", "ord", etc.
+
+[build]
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 200
+    hard_limit = 250
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "5s"
+    method = "GET"
+    path = "/health"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
+  cpu_kind = "shared"
+  cpus = 1

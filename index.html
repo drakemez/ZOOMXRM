@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmaster × Zoom — Driving Excellence at the Speed of Communication</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Archivo+Narrow:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  :root{
+    --rm-red:#C8102E;
+    --rm-red-deep:#8A0B20;
+    --rm-bone:#F4EEE3;
+    --rm-bone-2:#E8DFCC;
+    --ink:#1A1C20;
+    --ink-2:#232529;
+    --ink-3:#2B2E34;
+    --line:rgba(244,238,227,0.12);
+    --line-2:rgba(244,238,227,0.22);
+    --mute:rgba(244,238,227,0.62);
+    --mute-2:rgba(244,238,227,0.42);
+    --zoom:#0B5CFF;
+    --zoom-soft:#4A86FF;
+    --ok:#8DD35F;
+    --warn:#E8A33D;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--ink);color:var(--rm-bone);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .display{font-family:'Archivo Narrow',Impact,sans-serif;text-transform:uppercase;letter-spacing:.02em}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 40px}
+  @media (max-width:800px){.wrap{padding:0 20px}}
+  .chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .chip .dot{width:6px;height:6px;border-radius:50%;background:var(--rm-red);box-shadow:0 0 0 4px rgba(200,16,46,.2)}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:4px;font-weight:600;font-size:14px;letter-spacing:.02em;cursor:pointer;border:1px solid transparent;transition:all .15s}
+  .btn-red{background:var(--rm-red);color:#fff;border-color:var(--rm-red)}
+  .btn-red:hover{background:var(--rm-red-deep);border-color:var(--rm-red-deep)}
+  .btn-ghost{background:transparent;color:var(--rm-bone);border-color:var(--line-2)}
+  .btn-ghost:hover{border-color:var(--rm-bone);background:rgba(244,238,227,.04)}
+  ::selection{background:var(--rm-red);color:#fff}
+  /* nav */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(12px);background:rgba(255,255,255,.94);border-bottom:1px solid rgba(0,0,0,.08);box-shadow:0 1px 0 rgba(0,0,0,.04)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:80px;padding:14px 40px}
+  .nav-links{display:flex;gap:32px;font-size:13px;color:#000;font-weight:600}
+  .nav-links a{cursor:pointer;transition:color .15s}
+  .nav-links a:hover{color:var(--rm-red)}
+  .brand{display:flex;align-items:center;gap:14px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#0B0C0E}
+  .brand .x{color:rgba(11,12,14,.32)}
+  /* Animated logo is white-on-transparent; invert so it reads dark on the white nav */
+  .rm-logo img{filter:invert(1) brightness(.12)}
+  .progress{position:fixed;top:0;left:0;height:2px;background:var(--rm-red);z-index:60;transition:width .1s linear}
+  @media (max-width:900px){.nav-links{display:none}}
+  /* sections */
+  section{position:relative;padding:120px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--rm-red);font-weight:600}
+  h1.hero-h{font-family:'Archivo Narrow',Impact,sans-serif;font-size:clamp(52px,7.5vw,132px);line-height:.9;letter-spacing:-.01em;text-transform:uppercase;margin:24px 0;font-weight:600}
+  h2.sec-h{font-family:'Archivo Narrow',Impact,sans-serif;font-size:clamp(36px,4.8vw,72px);line-height:1;letter-spacing:-.005em;text-transform:uppercase;margin:12px 0 24px;font-weight:600}
+  .lede{font-size:20px;line-height:1.5;color:var(--mute);max-width:620px}
+  /* hero */
+  .hero{min-height:100vh;display:flex;align-items:center;padding-top:100px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.3fr .85fr;gap:60px;align-items:end;width:100%}
+  @media (max-width:1000px){.hero-grid{grid-template-columns:1fr;gap:40px}}
+  .hero-left .tag-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .hero-red{color:var(--rm-red)}
+  .hero-right{border-left:1px solid var(--line);padding-left:40px}
+  @media (max-width:1000px){.hero-right{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:40px}}
+  .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+  .stat-row .stat{padding:20px 0;border-top:1px solid var(--line)}
+  .stat .v{font-family:'Archivo Narrow',sans-serif;font-size:56px;line-height:1;font-weight:700}
+  .stat .l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin-top:8px}
+  .ticker{border:1px solid var(--line);border-radius:4px;padding:20px;background:linear-gradient(180deg,var(--ink-2) 0%,var(--ink) 100%);margin-top:24px}
+  .ticker-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13px}
+  .ticker-row:last-child{border-bottom:0}
+  .ticker-row .k{color:var(--mute);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .ticker-row .v{font-family:'JetBrains Mono',monospace;font-weight:500}
+  .hero-cta{display:flex;gap:12px;margin-top:36px;flex-wrap:wrap}
+  .backdrop{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:-1}
+  .backdrop .road{position:absolute;right:-10%;bottom:-20%;width:80%;height:140%;background:
+    radial-gradient(ellipse at 70% 40%,rgba(200,16,46,.18) 0%,transparent 55%);
+    filter:blur(20px)}
+  .grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);pointer-events:none;z-index:-1;opacity:.5}
+  /* problem strip */
+  .prob-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:48px}
+  @media (max-width:900px){.prob-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.prob-grid{grid-template-columns:1fr}}
+  .prob-cell{background:var(--ink);padding:36px 28px;position:relative}
+  .prob-cell .num{font-family:'Archivo Narrow',sans-serif;font-size:20px;color:var(--rm-red);font-weight:700}
+  .prob-cell h3{font-family:'Archivo Narrow',sans-serif;font-size:24px;text-transform:uppercase;font-weight:600;margin:16px 0 10px;letter-spacing:.01em}
+  .prob-cell p{font-size:14px;color:var(--mute);line-height:1.55;margin:0}
+  .prob-cell .bar{position:absolute;top:0;left:0;height:3px;background:var(--rm-red);width:0;transition:width .8s ease .2s}
+  .prob-cell.in-view .bar{width:100%}
+  /* plan toggle */
+  .seg{display:inline-flex;padding:4px;border:1px solid var(--line-2);border-radius:4px;background:var(--ink-2)}
+  .seg button{background:transparent;border:0;color:var(--mute);padding:10px 18px;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit}
+  .seg button.on{background:var(--rm-red);color:#fff}
+  .plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+  @media (max-width:900px){.plan-grid{grid-template-columns:1fr}}
+  .plan{background:var(--ink);padding:40px;position:relative}
+  .plan.featured{background:linear-gradient(180deg,rgba(200,16,46,.08),var(--ink) 40%);box-shadow:inset 3px 0 0 var(--rm-red)}
+  .plan .price{display:flex;align-items:baseline;gap:8px;margin:16px 0 4px}
+  .plan .price .big{font-family:'Archivo Narrow',sans-serif;font-size:56px;font-weight:700;line-height:1}
+  .plan .price .per{color:var(--mute);font-size:14px}
+  .plan .price .sub{color:var(--mute);font-size:13px;margin-top:4px}
+  .feat{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .feat:last-child{border-bottom:0}
+  .feat .ico{width:18px;height:18px;flex-shrink:0;margin-top:2px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+  .feat.yes .ico{background:rgba(141,211,95,.16);color:var(--ok)}
+  .feat.no .ico{background:rgba(244,238,227,.06);color:var(--mute-2)}
+  .feat.new .ico{background:rgba(200,16,46,.22);color:var(--rm-red)}
+  .feat .txt{flex:1;color:var(--rm-bone)}
+  .feat.no .txt{color:var(--mute-2);text-decoration:line-through;text-decoration-color:var(--line-2)}
+  .feat .desc{color:var(--mute);font-size:12px;margin-top:2px}
+  /* why zoom pillars */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+  @media (max-width:900px){.pillars{grid-template-columns:1fr}}
+  .pillar{padding:32px;border:1px solid var(--line);background:var(--ink-2);border-radius:4px;position:relative;overflow:hidden}
+  .pillar:hover{border-color:var(--line-2)}
+  .pillar .big-num{font-family:'Archivo Narrow',sans-serif;font-size:120px;line-height:1;color:var(--rm-red);opacity:.12;position:absolute;right:-10px;top:-20px;font-weight:700}
+  .pillar h3{font-family:'Archivo Narrow',sans-serif;font-size:28px;text-transform:uppercase;margin:0 0 12px;letter-spacing:.01em;font-weight:600}
+  .pillar p{color:var(--mute);font-size:14px;line-height:1.6;margin:0}
+  .pillar .stat{margin-top:20px;padding-top:20px;border-top:1px dashed var(--line);font-size:13px;color:var(--mute)}
+  .pillar .stat strong{color:var(--rm-bone);font-family:'JetBrains Mono',monospace}
+  /* ROI */
+  .roi-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;margin-top:48px;align-items:start}
+  @media (max-width:1000px){.roi-wrap{grid-template-columns:1fr}}
+  .roi-controls{background:var(--ink-2);border:1px solid var(--line);padding:32px;border-radius:4px}
+  .roi-row{padding:18px 0;border-bottom:1px dashed var(--line)}
+  .roi-row:last-child{border-bottom:0}
+  .roi-row .label{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:10px}
+  .roi-row .label .name{color:var(--rm-bone);font-weight:500}
+  .roi-row .label .val{font-family:'JetBrains Mono',monospace;color:var(--rm-red);font-weight:600}
+  .roi-row .desc{font-size:12px;color:var(--mute);margin-top:6px}
+  input[type=range]{-webkit-appearance:none;width:100%;height:2px;background:var(--line-2);border-radius:2px;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--rm-red);border:2px solid var(--ink);cursor:pointer;box-shadow:0 0 0 1px var(--rm-red)}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--rm-red);border:2px solid var(--ink);cursor:pointer}
+  .roi-results{background:linear-gradient(160deg,#18060A 0%,var(--ink) 70%);border:1px solid var(--rm-red-deep);padding:40px;border-radius:4px;position:relative;overflow:hidden}
+  .roi-results::before{content:'';position:absolute;top:0;right:0;width:240px;height:240px;background:radial-gradient(circle,rgba(200,16,46,.25),transparent 70%);border-radius:50%;pointer-events:none}
+  .roi-total{font-family:'Archivo Narrow',sans-serif;font-size:clamp(64px,9vw,112px);line-height:.95;font-weight:700;color:var(--rm-red);letter-spacing:-.01em}
+  .roi-total .cur{font-size:.5em;vertical-align:top;margin-right:6px;color:var(--rm-bone);opacity:.6}
+  .roi-label{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-top:12px}
+  .roi-breakdown{margin-top:28px}
+  .roi-bd-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px dashed var(--line);font-size:13px}
+  .roi-bd-row:last-child{border-bottom:1px dashed var(--line)}
+  .roi-bd-row .k{color:var(--mute)}
+  .roi-bd-row .v{font-family:'JetBrains Mono',monospace;color:var(--rm-bone)}
+  .roi-payback{margin-top:24px;padding:16px;background:rgba(0,0,0,.35);border-radius:4px;display:flex;justify-content:space-between;align-items:center}
+  .roi-payback .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .roi-payback .v{font-family:'Archivo Narrow',sans-serif;font-size:32px;font-weight:700;color:var(--ok)}
+  .preset-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+  .preset{padding:6px 12px;border:1px solid var(--line-2);border-radius:2px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);cursor:pointer;background:transparent;font-family:inherit}
+  .preset:hover{color:var(--rm-bone)}
+  .preset.on{background:var(--rm-bone);color:var(--ink);border-color:var(--rm-bone)}
+  /* TCO - side by side interactive */
+  .tco-tiers{margin-top:40px;display:flex;gap:10px;flex-wrap:wrap}
+  .tco-tier{position:relative;background:var(--ink-2);border:1px solid var(--line);color:var(--mute);padding:16px 20px;cursor:pointer;border-radius:3px;font-family:inherit;text-align:left;min-width:200px;flex:1;transition:all .15s}
+  .tco-tier:hover{border-color:var(--line-2);color:var(--rm-bone)}
+  .tco-tier.on{background:var(--ink);border-color:var(--rm-red);color:var(--rm-bone);box-shadow:inset 3px 0 0 var(--rm-red)}
+  .tco-tier .tag{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute-2);font-weight:600}
+  .tco-tier.on .tag{color:var(--rm-red)}
+  .tco-tier .lbl{font-family:'Archivo Narrow',sans-serif;font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:.02em;margin-top:6px;line-height:1.15}
+  .tco-tier .rec{position:absolute;top:-9px;right:12px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#fff;background:var(--rm-red);padding:3px 8px;border-radius:2px;font-weight:700}
+  .tco-side{margin-top:32px;display:grid;grid-template-columns:1fr auto 1fr;gap:0;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;align-items:stretch}
+  @media (max-width:900px){.tco-side{grid-template-columns:1fr}}
+  .tco-side-col{background:var(--ink);padding:40px}
+  .tco-side-col.zoom{background:linear-gradient(180deg,rgba(200,16,46,.08),var(--ink) 50%)}
+  .tco-side-col .vendor{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);font-weight:600}
+  .tco-side-col.zoom .vendor{color:var(--rm-red)}
+  .tco-side-col .pkg{font-family:'Archivo Narrow',sans-serif;font-size:22px;font-weight:600;text-transform:uppercase;margin-top:6px;line-height:1.15;min-height:54px}
+  .tco-side-col .mo{font-family:'Archivo Narrow',sans-serif;font-size:64px;font-weight:700;line-height:1;margin-top:20px}
+  .tco-side-col.zoom .mo{color:var(--rm-red)}
+  .tco-side-col .per{color:var(--mute);font-size:13px;margin-top:4px}
+  .tco-side-col .term{margin-top:20px;padding-top:20px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px}
+  .tco-side-col .term .v{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--rm-bone);display:block;margin-top:4px;font-size:15px}
+  .tco-side-col .term .k{color:var(--mute);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+  .tco-side-col .na{color:var(--mute-2);font-style:italic;font-size:15px;margin-top:20px;padding:14px;border:1px dashed var(--line-2);border-radius:2px;text-align:center}
+  .tco-vs{background:var(--ink);display:flex;align-items:center;justify-content:center;padding:0 18px;position:relative;min-width:140px}
+  @media (max-width:900px){.tco-vs{padding:8px;min-width:0}}
+  .tco-vs .vs-circle{width:96px;height:96px;border-radius:50%;border:1px solid var(--rm-red);display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--ink-2)}
+  .tco-vs .vs-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);font-weight:600}
+  .tco-vs .vs-delta{font-family:'Archivo Narrow',sans-serif;font-size:24px;font-weight:700;color:var(--ok);margin-top:2px}
+  .tco-vs .vs-delta.na{color:var(--mute-2);font-size:18px}
+  .tco-vs .vs-sub{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-top:4px;text-align:center;max-width:80px;line-height:1.3}
+  .tco-term{margin-top:32px;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  @media (max-width:700px){.tco-term{grid-template-columns:repeat(2,1fr)}}
+  .tco-term-cell{background:var(--ink);padding:24px}
+  .tco-term-cell .k{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);font-weight:600}
+  .tco-term-cell .v{font-family:'Archivo Narrow',sans-serif;font-size:32px;font-weight:700;color:var(--rm-bone);margin-top:10px;line-height:1}
+  .tco-term-cell.accent .v{color:var(--rm-red)}
+  .tco-term-cell .note{font-size:12px;color:var(--mute);margin-top:8px}
+  /* legacy TCO */
+  .tco{margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);border:1px solid var(--line)}
+  @media (max-width:900px){.tco{grid-template-columns:1fr}}
+  .tco-col{background:var(--ink);padding:32px}
+  .tco-col.hi{background:linear-gradient(180deg,rgba(200,16,46,.1),var(--ink) 50%)}
+  .tco-col .name{font-family:'Archivo Narrow',sans-serif;font-size:22px;text-transform:uppercase;font-weight:600;letter-spacing:.02em}
+  .tco-col .total{font-family:'Archivo Narrow',sans-serif;font-size:56px;font-weight:700;line-height:1;margin:16px 0 4px}
+  .tco-col .sub{color:var(--mute);font-size:13px}
+  .tco-col .delta{margin-top:24px;padding:12px;border-radius:2px;font-size:12px}
+  .tco-col .delta.bad{background:rgba(200,16,46,.12);color:#F5A6B0}
+  .tco-col .delta.good{background:rgba(141,211,95,.1);color:var(--ok)}
+  .tco-col .delta.neutral{background:rgba(244,238,227,.05);color:var(--mute)}
+  /* timeline */
+  .timeline{margin-top:48px;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--ink-2)}
+  .tl-head{display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);border-bottom:1px solid var(--line)}
+  .tl-head div{padding:16px 12px;border-right:1px solid var(--line);text-align:center}
+  .tl-head div:last-child{border-right:0}
+  .tl-row{position:relative;padding:24px;border-bottom:1px solid var(--line)}
+  .tl-row:last-child{border-bottom:0}
+  .tl-bar{height:40px;border-radius:2px;position:relative;cursor:pointer;transition:all .2s}
+  .tl-bar:hover{transform:translateY(-1px)}
+  .tl-bar .lbl{position:absolute;inset:0;display:flex;align-items:center;padding:0 16px;font-size:13px;font-weight:600;color:#fff;letter-spacing:.02em}
+  .tl-bar .dates{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.75;font-weight:400}
+  .tl-detail{margin-top:12px;font-size:13px;color:var(--mute);padding-left:16px;border-left:2px solid var(--line-2)}
+  /* compliance */
+  .compliance{margin-top:48px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  @media (max-width:900px){.compliance{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.compliance{grid-template-columns:1fr}}
+  .comp{padding:24px;border:1px solid var(--line);border-radius:4px;background:var(--ink-2)}
+  .comp .badge{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ok);background:rgba(141,211,95,.1);padding:3px 8px;border-radius:2px;display:inline-block;margin-bottom:12px}
+  .comp h4{font-family:'Archivo Narrow',sans-serif;font-size:20px;text-transform:uppercase;font-weight:600;margin:0 0 6px;letter-spacing:.02em}
+  .comp p{font-size:13px;color:var(--mute);line-height:1.55;margin:0}
+  /* concessions big number */
+  .concessions{margin-top:48px;padding:48px;border:1px solid var(--rm-red-deep);border-radius:4px;background:linear-gradient(100deg,#1A0610,var(--ink) 60%);display:grid;grid-template-columns:1fr 1.4fr;gap:40px;align-items:center}
+  @media (max-width:900px){.concessions{grid-template-columns:1fr}}
+  .concessions .num{font-family:'Archivo Narrow',sans-serif;font-size:clamp(72px,12vw,160px);line-height:.9;font-weight:700;color:var(--rm-red);letter-spacing:-.02em}
+  .concessions .lbl{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);margin-top:12px}
+  .concessions .split{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px}
+  .concessions .split .it{padding:16px;border:1px solid var(--line);border-radius:2px}
+  .concessions .split .it .v{font-family:'Archivo Narrow',sans-serif;font-size:28px;font-weight:700;color:var(--rm-bone)}
+  .concessions .split .it .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-top:4px}
+  /* decision */
+  .decision{background:linear-gradient(180deg,var(--ink) 0%,#0F0307 100%);padding:140px 0;text-align:center;border-bottom:0}
+  .decision h2{font-family:'Archivo Narrow',sans-serif;font-size:clamp(48px,7vw,112px);line-height:.95;text-transform:uppercase;font-weight:700;max-width:18ch;margin:0 auto 24px}
+  .decision h2 em{color:var(--rm-red);font-style:normal}
+  .decision .sub{color:var(--mute);font-size:18px;max-width:600px;margin:0 auto 40px;line-height:1.5}
+  .decision-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .contacts{margin-top:60px;display:flex;justify-content:center;gap:48px;flex-wrap:wrap;color:var(--mute);font-size:13px}
+  .contacts .c .n{color:var(--rm-bone);font-weight:500}
+  .contacts .c .r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-2);margin-top:4px}
+  /* footer */
+  footer{padding:40px;border-top:1px solid var(--line);color:var(--mute-2);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+  /* tweaks panel */
+  .tweaks{position:fixed;right:20px;bottom:20px;z-index:80;background:var(--ink-2);border:1px solid var(--line-2);border-radius:4px;padding:20px;width:300px;box-shadow:0 20px 40px rgba(0,0,0,.5);display:none}
+  .tweaks.on{display:block}
+  .tweaks h4{margin:0 0 16px;font-family:'Archivo Narrow',sans-serif;font-size:16px;text-transform:uppercase;letter-spacing:.14em;color:var(--rm-bone)}
+  .tweaks label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:12px 0 6px}
+  .tweaks select,.tweaks input[type=color]{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--rm-bone);padding:8px;border-radius:2px;font-family:inherit;font-size:13px}
+  .tweaks .swatch-row{display:flex;gap:8px;margin-top:6px}
+  .tweaks .swatch{width:28px;height:28px;border-radius:2px;cursor:pointer;border:2px solid transparent}
+  .tweaks .swatch.on{border-color:var(--rm-bone)}
+  .tw-toggle{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:12px;color:var(--mute);cursor:pointer}
+  .tw-toggle input{cursor:pointer}
+  /* scroll reveal */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  /* misc */
+  .two-col{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:start}
+  @media (max-width:900px){.two-col{grid-template-columns:1fr}}
+  .kv-list{list-style:none;padding:0;margin:24px 0 0}
+  .kv-list li{padding:14px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:14px}
+  .kv-list li .k{color:var(--mute)}
+  .kv-list li .v{color:var(--rm-bone);font-family:'JetBrains Mono',monospace;text-align:right}
+  /* Roadmaster logo */
+  .rm-logo{display:flex;align-items:center}
+  .rm-logo img{height:28px;width:auto;display:block}
+  @media (max-width:700px){.rm-logo img{height:22px}}
+  .zoom-mark{display:inline-flex;align-items:center}
+  .zoom-mark img{height:22px;width:auto;display:block}arrow',sans-serif}
+  /* road illustration */
+  .road-viz{margin-top:40px;height:120px;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:4px;background:#0A0B0D}
+  .road-line{position:absolute;top:50%;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,var(--rm-bone) 0 40px,transparent 40px 80px);transform:translateY(-50%);animation:road 1.2s linear infinite}
+  .road-nodes{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 5%;pointer-events:none}
+  .road-nodes .node{position:relative;text-align:center}
+  .road-nodes .node .dot{width:12px;height:12px;border-radius:50%;background:var(--rm-red);margin:0 auto 8px;box-shadow:0 0 0 4px rgba(200,16,46,.25)}
+  .road-nodes .node.done .dot{background:var(--ok);box-shadow:0 0 0 4px rgba(141,211,95,.2)}
+  .road-nodes .node .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+  @keyframes road{from{background-position:0 0}to{background-position:80px 0}}
+  /* channel grid for elite */
+  .channels{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:16px}
+  @media (max-width:700px){.channels{grid-template-columns:repeat(3,1fr)}}
+  .ch{padding:12px 8px;border:1px solid var(--line);border-radius:2px;text-align:center;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);background:var(--ink)}
+  .ch.on{color:var(--rm-bone);border-color:var(--rm-red);background:rgba(200,16,46,.06)}
+  .ch .ic{font-family:'Archivo Narrow',sans-serif;font-size:18px;color:var(--rm-bone);margin-bottom:4px;display:block;font-weight:700}
+  .ch.off .ic{color:var(--mute-2)}
+</style>
+</head>
+<body>
+  <div id="password-gate" style="position:fixed;inset:0;z-index:9999;background:#0B0C0E;display:flex;align-items:center;justify-content:center;font-family:'Inter',system-ui,sans-serif;color:#F4EEE3">
+    <div style="max-width:420px;width:calc(100% - 40px);padding:48px 40px;border:1px solid rgba(244,238,227,0.12);border-radius:4px;background:#15171B;text-align:center">
+      <div style="width:48px;height:48px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:#fff;padding:4px">
+        <img src="assets/roadmaster-logo.jpeg" alt="Roadmaster" style="width:100%;height:100%;object-fit:contain"/>
+      </div>
+      <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#C8102E;font-weight:600">Confidential</div>
+      <h1 style="font-family:'Archivo Narrow',Impact,sans-serif;font-size:32px;text-transform:uppercase;margin:12px 0 8px;font-weight:600;letter-spacing:.01em;line-height:1">Roadmaster × Zoom<br/>Executive Brief</h1>
+      <p style="color:rgba(244,238,227,0.62);font-size:14px;line-height:1.5;margin:0 0 28px">Prepared for Roadmaster Group leadership. Enter the access code shared with you.</p>
+      <form id="pw-form">
+        <input id="pw-input" type="password" autocomplete="off" autofocus placeholder="Access code" style="width:100%;padding:14px 16px;background:#0B0C0E;border:1px solid rgba(244,238,227,0.22);color:#F4EEE3;border-radius:2px;font-size:14px;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;text-align:center;outline:none"/>
+        <div id="pw-err" style="color:#C8102E;font-size:12px;letter-spacing:.08em;margin-top:10px;min-height:18px;text-transform:uppercase"></div>
+        <button type="submit" style="margin-top:16px;width:100%;background:#C8102E;color:#fff;border:0;padding:14px;font-weight:600;letter-spacing:.02em;font-size:14px;cursor:pointer;border-radius:4px;font-family:inherit">Enter →</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    (function(){
+      var CORRECT = 'ZOOMXRM';
+      var root = document.getElementById('password-gate');
+      var body = document.body;
+      // Lock scroll + hide page content until unlocked
+      body.style.overflow = 'hidden';
+      function unlock(){
+        try { sessionStorage.setItem('rm_zoom_auth','1'); } catch(e){}
+        root.style.transition = 'opacity .25s';
+        root.style.opacity = '0';
+        setTimeout(function(){ root.remove(); body.style.overflow = ''; }, 260);
+      }
+      try {
+        if (sessionStorage.getItem('rm_zoom_auth') === '1') { unlock(); return; }
+      } catch(e){}
+      var form = document.getElementById('pw-form');
+      var input = document.getElementById('pw-input');
+      var err = document.getElementById('pw-err');
+      form.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        if (input.value === CORRECT) { unlock(); }
+        else {
+          err.textContent = 'Incorrect access code';
+          input.value = '';
+          input.focus();
+          root.animate(
+            [{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],
+            {duration:220}
+          );
+        }
+      });
+    })();
+  </script>
+  <div class="progress" id="progress" style="width:0%"></div>
+  <div id="root"></div>
+
+<script>
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "accent": "#C8102E",
+    "display_font": "Archivo Narrow",
+    "show_ringcentral": true,
+    "roi_preset": "balanced"
+  }/*EDITMODE-END*/;
+</script>
+
+<script type="text/babel" data-presets="env,react">
+const { useState, useEffect, useMemo, useRef } = React;
+
+/* ---------- logos ---------- */
+const RoadmasterLogo = () => (
+  <div className="rm-logo">
+    <img src="assets/roadmaster-logo-animated.webp" alt="Roadmaster Group"/>
+  </div>
+);
+const ZoomMark = () => (
+  <span className="zoom-mark"><img src="assets/zoom-logo.png" alt="Zoom"/></span>
+);
+
+/* ---------- nav ---------- */
+const Nav = () => {
+  const sections = [
+    ['problem','The Problem'],
+    ['why','Why Zoom'],
+    ['elite','Elite Upgrade'],
+    ['roi','ROI'],
+    ['tco','Total Cost'],
+    ['timeline','Timeline'],
+    ['decision','Decision']
+  ];
+  const scrollTo = id => document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+  return (
+    <div className="nav">
+      <div className="nav-inner">
+        <div className="brand">
+          <RoadmasterLogo/>
+          <span className="x">×</span>
+          <ZoomMark/>
+        </div>
+        <div className="nav-links">
+          {sections.map(([id,l])=>(<a key={id} onClick={()=>scrollTo(id)}>{l}</a>))}
+        </div>
+        <div className="chip"><span className="dot"></span>Executive Brief · Confidential</div>
+      </div>
+    </div>
+  );
+};
+
+/* ---------- reveal hook ---------- */
+const useReveal = () => {
+  useEffect(()=>{
+    const io = new IntersectionObserver(ents=>{
+      ents.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');if(e.target.classList.contains('prob-cell'))e.target.classList.add('in-view');io.unobserve(e.target)}});
+    },{threshold:.15});
+    document.querySelectorAll('.reveal,.prob-cell').forEach(el=>io.observe(el));
+    return ()=>io.disconnect();
+  },[]);
+};
+
+/* ---------- hero ---------- */
+const Hero = () => {
+  const [seats,setSeats] = useState(0);
+  const [cc,setCc] = useState(0);
+  const [trucks,setTrucks] = useState(0);
+  useEffect(()=>{
+    let s=0,c=0,t=0; const id=setInterval(()=>{
+      if(s<240)s+=5; if(c<70)c+=1; if(t<700)t+=14;
+      setSeats(Math.min(240,s));setCc(Math.min(70,c));setTrucks(Math.min(700,t));
+      if(s>=240&&c>=70&&t>=700)clearInterval(id);
+    },24);
+    return ()=>clearInterval(id);
+  },[]);
+  return (
+    <section className="hero" id="top">
+      <div className="grid-bg"/>
+      <div className="backdrop"><div className="road"/></div>
+      <div className="wrap">
+        <div className="hero-grid">
+          <div className="hero-left">
+            <div className="chip"><span className="dot"></span>Michael Fisk, VP of IT · Executive Business Case</div>
+            <h1 className="hero-h">Driving Excellence<br/>deserves a <span className="hero-red">communications<br/>platform</span> that<br/>can keep up.</h1>
+            <p className="lede">A 42-month case for consolidating Roadmaster Group's 240 Workplace users and 70 dispatch agents onto a single, AI-enabled communications platform — with Zoom Contact Center Elite as the force-multiplier for your fleet operations.</p>
+            <div className="hero-cta">
+              <button className="btn btn-red" onClick={()=>document.getElementById('roi').scrollIntoView({behavior:'smooth'})}>See the ROI →</button>
+              <button className="btn btn-ghost" onClick={()=>document.getElementById('elite').scrollIntoView({behavior:'smooth'})}>Why Elite, not Essentials</button>
+            </div>
+          </div>
+          <div className="hero-right">
+            <div className="eyebrow">Scope of change</div>
+            <div className="stat-row" style={{marginTop:16}}>
+              <div className="stat"><div className="v">{seats}</div><div className="l">Workplace seats</div></div>
+              <div className="stat"><div className="v">{cc}</div><div className="l">Contact center agents</div></div>
+            </div>
+            <div className="ticker">
+              <div className="ticker-row"><span className="k">Fleet</span><span className="v">{trucks}+ trucks · 2,500 trailers</span></div>
+              <div className="ticker-row"><span className="k">Current</span><span className="v">RingCentral RingEX</span></div>
+              <div className="ticker-row"><span className="k">Target go-live</span><span className="v">Sep 1, 2026</span></div>
+              <div className="ticker-row"><span className="k">Governance</span><span className="v">SSO · U.S. data residency</span></div>
+              <div className="ticker-row"><span className="k">Term</span><span className="v">42 months · annual billing</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ---------- the problem ---------- */
+const ProblemStrip = () => {
+  const items = [
+    {n:'01',h:'Outage risk on the dispatch line',p:'RingCentral reliability issues already hit a dispatch-critical tenant. Every minute of downtime stops trucks and starts detention fees.'},
+    {n:'02',h:'Support that can\'t keep a truck moving',p:'Ticket response times don\'t align to a 24/7 freight operation. IT shoulders the escalation burden that should belong to the vendor.'},
+    {n:'03',h:'Blind spots in analytics',p:'Limited reporting on 70 agent seats — no AHT, FCR, or abandonment insight at the granularity Ops needs to staff dispatch.'},
+    {n:'04',h:'On-prem integration drag',p:'Doesn\'t play well with the 100% on-prem Microsoft environment. IT absorbs the manual workarounds and identity sprawl.'},
+    {n:'05',h:'Users actively dislike Meetings',p:'Low adoption of RingCentral Meetings means Roadmaster is paying for a platform the organization has voted against with its behavior.'},
+    {n:'06',h:'Governance debt',p:'Admin fragmentation, inconsistent retention, and weak data-residency controls mean IT is carrying compensating controls the platform should own natively.'},
+    {n:'07',h:'Two systems, two bills',p:'Workplace and contact center billed, administered, and monitored separately. More surface area, more identity sprawl, more admin overhead.'},
+    {n:'08',h:'AI stuck on the curb',p:'No native AI Companion, no Expert Assist, no virtual agent. Dispatch questions drivers ask a dozen times a day get zero automation leverage.'},
+  ];
+  return (
+    <section id="problem">
+      <div className="wrap">
+        <div className="reveal">
+          <div className="eyebrow">What we're replacing — and why</div>
+          <h2 className="sec-h">Eight pain points.<br/>One contract renewal on Sep 26.</h2>
+          <p className="lede">A candid look at where RingCentral is costing Roadmaster — in dollars, in trust, and in the IT team's evenings.</p>
+        </div>
+        <div className="prob-grid">
+          {items.map(it=>(
+            <div key={it.n} className="prob-cell">
+              <div className="bar"/>
+              <div className="num">{it.n}</div>
+              <h3>{it.h}</h3>
+              <p>{it.p}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ---------- why zoom pillars ---------- */
+const WhyZoom = () => {
+  const pillars = [
+    {n:'01',h:'One platform, one contract',p:'Workplace Business Plus and Contact Center billed, provisioned, and managed together. One admin console for 240 users and 70 agents — not two.',stat:'240 + 70 licenses · 42-month term'},
+    {n:'02',h:'Reliability that moves freight',p:'Carrier-grade uptime and global SLA muscle. When dispatch picks up the phone at 3:14 AM, the line connects the first time, every time.',stat:'99.999% target · 24×7 named support'},
+    {n:'03',h:'Enterprise-grade governance',p:'SSO, managed domains, U.S. data residency, admin-controlled retention and redaction. The controls a high-value, credentialed carrier expects from a platform of record.',stat:'SSO · U.S. data residency · admin retention'},
+    {n:'04',h:'Fits your existing estate',p:'Native integration with Microsoft 365 and ServiceDesk+. Open APIs and an ISV exchange for the rest of the stack — no brittle one-offs.',stat:'M365 · ServiceDesk+ · open APIs'},
+    {n:'05',h:'AI Companion, included',p:'Meeting summaries, smart recordings, team chat threads, knowledge base — native AI across Workplace at no additional per-seat cost.',stat:'Included with Business Plus'},
+    {n:'06',h:'Trained on nobody else\'s data',p:'Zoom\'s AI model does not train on customer data to improve external systems. Admins control redaction and storage location.',stat:'Customer-controlled data governance'},
+  ];
+  return (
+    <section id="why">
+      <div className="wrap">
+        <div className="reveal">
+          <div className="eyebrow">Why Zoom, not another RingCentral</div>
+          <h2 className="sec-h">Six reasons this is<br/>the right platform<br/>for a trucking company.</h2>
+          <p className="lede">Roadmaster isn't a generic 240-seat business. You dispatch high-value, credentialed freight across a 48-state + Canada lane network. The platform has to reflect that.</p>
+        </div>
+        <div className="pillars">
+          {pillars.map(p=>(
+            <div key={p.n} className="pillar reveal">
+              <div className="big-num">{p.n}</div>
+              <h3>{p.h}</h3>
+              <p>{p.p}</p>
+              <div className="stat"><strong>{p.stat}</strong></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ---------- elite comparison ---------- */
+const EliteCompare = ({showRC}) => {
+  const [plan,setPlan] = useState('elite');
+  const rows = [
+    {k:'70 named agent licenses',e:'$99 / agent',s:'$50 / agent',rc:'$85+ / agent',yesE:true,yesS:true},
+    {k:'Voice · Video · Chat · SMS channels',e:true,s:true,rc:true},
+    {k:'Email channel',e:true,s:false,rc:'Add-on'},
+    {k:'Social channels',e:true,s:false,rc:false},
+    {k:'Quality Management',e:'Included',s:'$60 / agent add-on',rc:'Add-on',hl:'elite'},
+    {k:'AI Expert Assist (real-time agent coaching)',e:'Included',s:'$40 / agent add-on',rc:false,hl:'elite'},
+    {k:'Workforce Management',e:'Included',s:'$20 / agent add-on',rc:'Separate tool',hl:'elite'},
+    {k:'Open APIs for line-of-business integrations',e:true,s:true,rc:'Custom'},
+    {k:'AI Virtual Agent option',e:true,s:true,rc:false},
+    {k:'84 toll-free + 20 local numbers',e:'Included',s:'Included',rc:'Metered'},
+  ];
+  // Numbers from Roadmaster BOM v4 (Apr 2026). 240 Workplace seats, 70 CC agents, 150 additional DIDs.
+  const totals = {
+    elite:      {grand:11923.50, free:95388,  disc:216000, allIn:311388,   freeMo:8},
+    essentials: {grand:8843.50,  free:44217.5,disc:155880, allIn:200097.5, freeMo:5}
+  };
+  const t = totals[plan];
+  return (
+    <section id="elite">
+      <div className="wrap">
+        <div className="reveal">
+          <div className="eyebrow">The real question — Elite or Essentials</div>
+          <h2 className="sec-h">Essentials is a major leap forward.<br/>Elite is <span style={{color:'var(--rm-red)'}}>transformative.</span></h2>
+          <p className="lede">Essentials already delivers a unified, modern, AI-enabled contact center — a significant upgrade on every axis. Elite takes the same foundation and adds the three modules that turn a 50-agent dispatch floor into a measurable, continuously-improving operation: Quality Management, AI Expert Assist, and Workforce Management.</p>
+        </div>
+
+        <div style={{marginTop:40,display:'flex',gap:16,alignItems:'center',flexWrap:'wrap'}}>
+          <div className="seg">
+            <button className={plan==='essentials'?'on':''} onClick={()=>setPlan('essentials')}>Essentials</button>
+            <button className={plan==='elite'?'on':''} onClick={()=>setPlan('elite')}>Elite</button>
+          </div>
+          <span style={{color:'var(--mute)',fontSize:13}}>Toggle to see how the numbers and features move</span>
+        </div>
+
+        <div className="plan-grid">
+          <div className={'plan '+(plan==='essentials'?'featured':'')}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
+              <div>
+                <div className="eyebrow" style={{color:plan==='essentials'?'var(--rm-red)':'var(--mute)'}}>Contact Center Essentials</div>
+                <h3 style={{fontFamily:"'Archivo Narrow',sans-serif",fontSize:28,textTransform:'uppercase',margin:'8px 0 0',fontWeight:600}}>A modern foundation</h3>
+              </div>
+              {plan==='essentials' && <span className="chip" style={{borderColor:'var(--rm-red)',color:'var(--rm-red)'}}><span className="dot"/>Selected</span>}
+            </div>
+            <div className="price">
+              <div className="big">$8,844</div>
+              <div className="per">/ month · all-in</div>
+            </div>
+            <div style={{color:'var(--mute)',fontSize:13}}>240 Workplace + 70 CC Essentials agents · 42-month term · 5 months free</div>
+            <ul style={{listStyle:'none',padding:0,margin:'24px 0 0'}}>
+              {rows.map((r,i)=>(
+                <div key={i} className={'feat '+(r.s===true?'yes':r.s===false?'no':'yes')}>
+                  <div className="ico">{r.s===true?'✓':r.s===false?'—':'+'}</div>
+                  <div className="txt">{r.k}<div className="desc">{typeof r.s==='string'?r.s:''}</div></div>
+                </div>
+              ))}
+            </ul>
+          </div>
+
+          <div className={'plan '+(plan==='elite'?'featured':'')}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
+              <div>
+                <div className="eyebrow" style={{color:plan==='elite'?'var(--rm-red)':'var(--mute)'}}>Contact Center Elite</div>
+                <h3 style={{fontFamily:"'Archivo Narrow',sans-serif",fontSize:28,textTransform:'uppercase',margin:'8px 0 0',fontWeight:600}}>A transformative operation</h3>
+              </div>
+              {plan==='elite' && <span className="chip" style={{borderColor:'var(--rm-red)',color:'var(--rm-red)'}}><span className="dot"/>Selected</span>}
+            </div>
+            <div className="price">
+              <div className="big">$11,924</div>
+              <div className="per">/ month · all-in</div>
+            </div>
+            <div style={{color:'var(--mute)',fontSize:13}}>240 Workplace + 70 CC Elite agents · 42-month term · 8 months free</div>
+            <ul style={{listStyle:'none',padding:0,margin:'24px 0 0'}}>
+              {rows.map((r,i)=>(
+                <div key={i} className={'feat '+(r.hl==='elite'?'new':(r.e===true?'yes':r.e===false?'no':'yes'))}>
+                  <div className="ico">{r.hl==='elite'?'★':r.e===true?'✓':r.e===false?'—':'✓'}</div>
+                  <div className="txt">{r.k}<div className="desc">{typeof r.e==='string'?r.e:''}{r.hl==='elite'?' — bundled in Elite':''}</div></div>
+                </div>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="concessions reveal">
+          <div>
+            <div className="num">${(t.allIn/1000).toFixed(1)}K</div>
+            <div className="lbl">Concessions on {plan === 'elite' ? 'Elite' : 'Essentials'} over the 42-month term</div>
+            <p style={{color:'var(--mute)',fontSize:13,marginTop:16,maxWidth:'40ch'}}>Zoom's negotiated value on the {plan === 'elite' ? 'Elite' : 'Essentials'} bundle. The delta between plans — ${(311388-200097.5).toLocaleString(undefined,{maximumFractionDigits:0})} — reflects the additional concessions Zoom applied to land Elite at a price Roadmaster can defend to the board.</p>
+          </div>
+          <div>
+            <div className="split">
+              <div className="it"><div className="v">{t.freeMo}</div><div className="k">Free months of service</div></div>
+              <div className="it"><div className="v">${(t.free/1000).toFixed(1)}K</div><div className="k">Value of free months</div></div>
+              <div className="it"><div className="v">${(t.disc/1000).toFixed(1)}K</div><div className="k">Value of discounted licenses</div></div>
+              <div className="it"><div className="v">${t.grand.toLocaleString(undefined,{maximumFractionDigits:0})}</div><div className="k">All-in monthly (post-discount)</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ---------- ROI calculator ---------- */
+const ROI = () => {
+  const presets = {
+    conservative:{ahtPct:5,fcrPct:3,attritionPct:10,superPct:5},
+    balanced:{ahtPct:12,fcrPct:8,attritionPct:25,superPct:15},
+    aggressive:{ahtPct:20,fcrPct:15,attritionPct:40,superPct:25},
+  };
+  const [preset,setPreset] = useState(window.TWEAK_STATE?.roi_preset || 'balanced');
+  const [ahtPct,setAht] = useState(presets.balanced.ahtPct);
+  const [fcrPct,setFcr] = useState(presets.balanced.fcrPct);
+  const [attr,setAttr] = useState(presets.balanced.attritionPct);
+  const [sup,setSup] = useState(presets.balanced.superPct);
+
+  const applyPreset = (p) => { setPreset(p); setAht(presets[p].ahtPct); setFcr(presets[p].fcrPct); setAttr(presets[p].attritionPct); setSup(presets[p].superPct); };
+
+  // Assumptions (fully visible to the VP)
+  const AGENTS = 70;
+  const SUPERVISORS = 6;
+  const AGENT_LOAD = 95000; // fully loaded annual
+  const SUP_LOAD = 135000;
+  const ATTRITION_BASE = 0.28; // industry
+  const REPLACEMENT_COST = 18000;
+  const CALLS_PER_DAY_PER_AGENT = 55;
+  const BUSINESS_DAYS = 250;
+  const AVG_CALL_MIN = 6.2;
+  const AGENT_HR_COST = AGENT_LOAD/(250*8);
+
+  const totals = useMemo(()=>{
+    // 1) AHT reduction via Expert Assist (Elite)
+    const totalMinutes = CALLS_PER_DAY_PER_AGENT*AGENTS*BUSINESS_DAYS*AVG_CALL_MIN;
+    const minutesSaved = totalMinutes * (ahtPct/100);
+    const ahtSavings = (minutesSaved/60) * AGENT_HR_COST;
+
+    // 2) FCR lift: fewer repeat calls → capacity recovered
+    const repeatCallReductionPct = fcrPct/100;
+    const callsPerYear = CALLS_PER_DAY_PER_AGENT*AGENTS*BUSINESS_DAYS;
+    const callsAvoided = callsPerYear*0.18*repeatCallReductionPct; // 18% base repeat rate
+    const fcrSavings = callsAvoided*AVG_CALL_MIN/60*AGENT_HR_COST;
+
+    // 3) Attrition reduction via QM + WFM + better tooling
+    const attritionReduction = ATTRITION_BASE*(attr/100);
+    const agentsRetained = AGENTS*attritionReduction;
+    const attritionSavings = agentsRetained*REPLACEMENT_COST;
+
+    // 4) Supervisor productivity via QM automation + unified admin
+    const supProductivity = SUPERVISORS*SUP_LOAD*(sup/100);
+
+    // 5) RingCentral baseline avoided + admin consolidation
+    // Assume RC + separate CC platform costs ~$15k/mo
+    const platformConsolidation = (15000-12869.50)*12;
+
+    const total = ahtSavings+fcrSavings+attritionSavings+supProductivity+platformConsolidation;
+    const eliteAnnual = 12869.50*12;
+    const paybackMonths = eliteAnnual/(total/12);
+    return {ahtSavings,fcrSavings,attritionSavings,supProductivity,platformConsolidation,total,paybackMonths};
+  },[ahtPct,fcrPct,attr,sup]);
+
+  const fmt = n => '$'+Math.round(n).toLocaleString();
+
+  return (
+    <section id="roi">
+      <div className="wrap">
+        <div className="reveal">
+          <div className="eyebrow">VP of IT, here's the math</div>
+          <h2 className="sec-h">ROI calculator —<br/>every assumption visible,<br/>every lever yours.</h2>
+          <p className="lede">No black-box business case. Adjust the four levers Elite actually pulls, and watch the first-year impact recompute. Defaults are the middle of peer trucking contact-center benchmarks.</p>
+        </div>
+
+        <div className="roi-wrap">
+          <div className="roi-controls reveal">
+            <div className="eyebrow" style={{color:'var(--mute)'}}>Choose a posture</div>
+            <div className="preset-row" style={{marginTop:12}}>
+              {Object.keys(presets).map(p=>(
+                <button key={p} className={'preset '+(preset===p?'on':'')} onClick={()=>applyPreset(p)}>{p}</button>
+              ))}
+            </div>
+
+            <div className="roi-row">
+              <div className="label"><span className="name">AHT reduction from AI Expert Assist</span><span className="val">−{ahtPct}%</span></div>
+              <input type="range" min="0" max="25" value={ahtPct} onChange={e=>{setAht(+e.target.value);setPreset('custom')}}/>
+              <div className="desc">Real-time agent coaching on live load-status and dispatch calls. Peer Elite benchmarks: 8–18%.</div>
+            </div>
+
+            <div className="roi-row">
+              <div className="label"><span className="name">First-call resolution lift</span><span className="val">+{fcrPct}%</span></div>
+              <input type="range" min="0" max="20" value={fcrPct} onChange={e=>{setFcr(+e.target.value);setPreset('custom')}}/>
+              <div className="desc">Unified knowledge base and AI Companion surface answers inside the agent desktop.</div>
+            </div>
+
+            <div className="roi-row">
+              <div className="label"><span className="name">Agent attrition reduction</span><span className="val">−{attr}%</span></div>
+              <input type="range" min="0" max="50" value={attr} onChange={e=>{setAttr(+e.target.value);setPreset('custom')}}/>
+              <div className="desc">Quality Management + Workforce Management reduce the two top churn drivers — unfair scheduling and opaque coaching. Industry attrition baseline: 28%.</div>
+            </div>
+
+            <div className="roi-row">
+              <div className="label"><span className="name">Supervisor productivity gain</span><span className="val">+{sup}%</span></div>
+              <input type="range" min="0" max="35" value={sup} onChange={e=>{setSup(+e.target.value);setPreset('custom')}}/>
+              <div className="desc">QM automation eliminates 100%-manual call sampling. 6 supervisors × recovered hours.</div>
+            </div>
+
+            <div style={{marginTop:20,paddingTop:20,borderTop:'1px solid var(--line)'}}>
+              <div className="eyebrow" style={{color:'var(--mute)'}}>Fixed assumptions</div>
+              <ul className="kv-list">
+                <li><span className="k">Agents · Supervisors</span><span className="v">70 · 8</span></li>
+                <li><span className="k">Calls / agent / day</span><span className="v">55 @ 6.2 min AHT</span></li>
+                <li><span className="k">Fully-loaded agent cost</span><span className="v">$95,000</span></li>
+                <li><span className="k">Agent replacement cost</span><span className="v">$18,000</span></li>
+                <li><span className="k">Baseline attrition</span><span className="v">28% / yr</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="roi-results reveal">
+            <div className="eyebrow" style={{color:'var(--rm-bone)'}}>Year-1 Elite value delivered</div>
+            <div className="roi-total"><span className="cur">$</span>{Math.round(totals.total).toLocaleString()}</div>
+            <div className="roi-label">Annualized benefit vs. staying on RingCentral + Essentials</div>
+
+            <div className="roi-breakdown">
+              <div className="roi-bd-row"><span className="k">AHT reduction (Expert Assist)</span><span className="v">{fmt(totals.ahtSavings)}</span></div>
+              <div className="roi-bd-row"><span className="k">FCR lift</span><span className="v">{fmt(totals.fcrSavings)}</span></div>
+              <div className="roi-bd-row"><span className="k">Attrition reduction (QM + WFM)</span><span className="v">{fmt(totals.attritionSavings)}</span></div>
+              <div className="roi-bd-row"><span className="k">Supervisor productivity</span><span className="v">{fmt(totals.supProductivity)}</span></div>
+              <div className="roi-bd-row"><span className="k">Platform consolidation vs RC</span><span className="v">{fmt(totals.platformConsolidation)}</span></div>
+            </div>
+
+            <div className="roi-payback">
+              <span className="k">Payback period on Elite</span>
+              <span className="v">{isFinite(totals.paybackMonths)?totals.paybackMonths.toFixed(1):'—'} mo</span>
+            </div>
+
+            <div style={{fontSize:12,color:'var(--mute-2)',marginTop:20,lineHeight:1.6}}>
+              Conservative methodology. Excludes soft benefits (driver satisfaction, dispatcher retention halo, security-incident avoidance). Based on Zoom Elite customer case studies in trucking & 3PL verticals.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ---------- TCO ---------- */
+const TCO = ({showRC}) => {
+  // Pricing from Roadmaster BOM v4 "Side by Side" tab (Apr 2026)
+  // Zoom columns include 42-month term totals, concessions, and free months from the BOM's
+  // Zoom Workplace / ESSENTIALS / ELITE / ELITE+CAIC sheets.
+  const tiers = [
+    {
+      id:'phone',
+      tag:'Tier 01',
+      label:'Phone Only',
+      rc:{pkg:'RingCentral Phone (current)', mo:10500},
+      zoom:{pkg:'Zoom Workplace Business Plus', mo:4450, term:160200, free:22250, disc:82080, concAll:104330, freeMo:5},
+    },
+    {
+      id:'ess',
+      tag:'Tier 02',
+      label:'Phone + CX Standard',
+      rc:{pkg:'RingCentral Phone + CX Standard', mo:15050},
+      zoom:{pkg:'ZWBP + Contact Center Essentials', mo:8843.50, term:318366, free:44217.5, disc:155880, concAll:200097.5, freeMo:5},
+    },
+    {
+      id:'eli',
+      tag:'Tier 03',
+      label:'Phone + CX Elite',
+      recommended:true,
+      rc:{pkg:'RingCentral Phone + CX Elite', mo:20650},
+      zoom:{pkg:'ZWBP + Contact Center Elite', mo:11923.50, term:429246, free:95388, disc:216000, concAll:311388, freeMo:8},
+    },
+    {
+      id:'caic',
+      tag:'Tier 04',
+      label:'Elite + Custom AI Companion',
+      rc:{pkg:'RingCentral Phone + Elite + CAIC', mo:null},
+      zoom:{pkg:'ZWBP + Elite + Custom AI Companion', mo:14223.50, term:512046, free:113788, disc:288720, concAll:402508, freeMo:8},
+    },
+  ];
+  const [active,setActive] = useState('eli');
+  const tier = tiers.find(t=>t.id===active);
+  const monthlyDelta = tier.rc.mo!=null ? tier.rc.mo - tier.zoom.mo : null;
+  const monthlyPct = tier.rc.mo!=null ? Math.round((monthlyDelta/tier.rc.mo)*100) : null;
+
+  const fmt  = n => '$'+n.toLocaleString(undefined,{maximumFractionDigits:0});
+  const fmtK = n => '$'+(n/1000).toFixed(0)+'K';
+
+  return (
+    <section id="tco">
+      <div className="wrap">
+        <div className="reveal">
+          <div className="eyebrow">Total cost of ownership · 42-month term</div>
+          <h2 className="sec-h">Same capability.<br/><span style={{color:'var(--rm-red)'}}>Less money.</span> Every month.</h2>
+          <p className="lede">Pick any tier of capability. Zoom comes in under RingCentral at every level — and the recommended Elite tier unlocks QM, AI Expert Assist, and Workforce Management that RingCentral either bolts on separately or can't match.</p>
+        </div>
+
+        <div className="tco-tiers reveal">
+          {tiers.map(t=>(
+            <button key={t.id} className={'tco-tier '+(active===t.id?'on':'')} onClick={()=>setActive(t.id)}>
+              {t.recommended && <span className="rec">Recommended</span>}
+              <div className="tag">{t.tag}</div>
+              <div className="lbl">{t.label}</div>
+            </button>
+          ))}
+        </div>
+
+        <div className="tco-side reveal">
+          {showRC ? (
+            <div className="tco-side-col">
+              <div className="vendor">RingCentral</div>
+              <div className="pkg">{tier.rc.pkg}</div>
+              {tier.rc.mo!=null ? (
+                <>
+                  <div className="mo" style={{color:'var(--warn)'}}>{fmt(tier.rc.mo)}</div>
+                  <div className="per">/ month · current posture · two platforms</div>
+                  <div className="term">
+                    <div><div className="k">42-mo term</div><span className="v">{fmtK(tier.rc.mo*42)}</span></div>
+                    <div><div className="k">Concessions</div><span className="v">$0</span></div>
+                    <div><div className="k">Free months</div><span className="v">0</span></div>
+                    <div><div className="k">Platforms</div><span className="v">2</span></div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="na">RingCentral does not offer a comparable Custom AI Companion SKU.</div>
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="tco-side-col">
+              <div className="vendor" style={{color:'var(--mute-2)'}}>Baseline hidden</div>
+              <div className="pkg" style={{color:'var(--mute-2)'}}>Toggle RingCentral baseline on in Tweaks to see side-by-side.</div>
+            </div>
+          )}
+
+          <div className="tco-vs">
+            <div className="vs-circle">
+              <div className="vs-label">Saves</div>
+              {monthlyDelta!=null ? (
+                <>
+                  <div className="vs-delta">{fmt(monthlyDelta)}</div>
+                  <div className="vs-sub">{monthlyPct}% / month</div>
+                </>
+              ) : (
+                <>
+                  <div className="vs-delta na">Zoom only</div>
+                  <div className="vs-sub">No RC equivalent</div>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="tco-side-col zoom">
+            <div className="vendor">Zoom</div>
+            <div className="pkg">{tier.zoom.pkg}</div>
+            <div className="mo">{fmt(tier.zoom.mo)}</div>
+            <div className="per">/ month · post-concession · paid annually</div>
+            <div className="term">
+              <div><div className="k">42-mo term</div><span className="v">{fmtK(tier.zoom.term)}</span></div>
+              <div><div className="k">Concessions</div><span className="v">{fmtK(tier.zoom.concAll)}</span></div>
+              <div><div className="k">Free months</div><span className="v">{tier.zoom.freeMo}</span></div>
+              <div><div className="k">Platforms</div><span className="v">1</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="tco-term reveal">
+          <div className="tco-term-cell">
+            <div className="k">RC 42-mo total</div>
+            <div className="v">{tier.rc.mo!=null?fmtK(tier.rc.mo*42):'—'}</div>
+            <div className="note">{tier.rc.mo!=null?'At today\'s RC monthly spend':'No RingCentral equivalent'}</div>
+          </div>
+          <div className="tco-term-cell accent">
+            <div className="k">Zoom 42-mo total</div>
+            <div className="v">{fmtK(tier.zoom.term)}</div>
+            <div className="note">Post-concession, paid annually</div>
+          </div>
+          <div className="tco-term-cell accent">
+            <div className="k">42-mo savings</div>
+            <div className="v">{tier.rc.mo!=null?fmtK(tier.rc.mo*42 - tier.zoom.term):'—'}</div>
+            <div className="note">{tier.rc.mo!=null?'Zoom vs. RingCentral, full term':'Apples-to-oranges'}</div>
+          </div>
+          <div className="tco-term-cell">
+            <div className="k">Total concession value</div>
+            <div className="v">{fmtK(tier.zoom.concAll)}</div>
+            <div className="note">Free months + discounted licenses</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ---------- timeline ---------- */
+const Timeline = () => {
+  const phases = [
+    {name:'IT Demo & Q&A',start:0,end:0.55,date:'Apr 16, 2026',color:'#4A86FF',detail:'Technical validation with Mitchell & Tracy. Architecture walk-through and Q&A.'},
+    {name:'Legal Review',start:0.55,end:0.95,date:'Apr 20–27',color:'#6E7CB9',detail:'MSA sent, legal review, final BOM and procurement sign-off — ahead of signature.'},
+    {name:'Contract Finalization',start:0.95,end:1.05,date:'Apr 28, 2026',color:'#A65778',detail:'Signature date. MSA executed, order placed.'},
+    {name:'Deployment Ph. 1–3',start:2,end:5.2,date:'Jun–Aug',color:'#C8102E',detail:'Configuration, integration, pilot, training, UAT across dispatch and back office.'},
+    {name:'Go-Live',start:5.2,end:5.5,date:'Sep 1, 2026',color:'#8DD35F',detail:'Full production launch. RingCentral runs in parallel for 25 days.'},
+    {name:'RC Contract Ends',start:5.5,end:6,date:'Sep 26, 2026',color:'#F4EEE3',detail:'Transition complete. Single-platform, post-cutover support posture.'},
+  ];
+  const [active,setActive] = useState(3);
+  return (
+    <section id="timeline">
+      <div className="wrap">
+        <div className="reveal">
+          <div className="eyebrow">Five months, one cutover</div>
+          <h2 className="sec-h">Timeline to go-live.</h2>
+          <p className="lede">Go-live aligned to Sep 1, 2026 — with 25 days of overlap before the RingCentral contract ends Sep 26. No gap, no daylight.</p>
+        </div>
+
+        <div className="road-viz reveal">
+          <div className="road-line"/>
+          <div className="road-nodes">
+            {['Apr','May','Jun','Jul','Aug','Sep'].map((m,i)=>(
+              <div key={m} className={'node '+(i<=5?'':'')}>
+                <div className="dot" style={{background:i===5?'var(--ok)':'var(--rm-red)'}}/>
+                <div className="lbl">{m} '26</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="timeline reveal">
+          <div className="tl-head">
+            <div>Apr</div><div>May</div><div>Jun</div><div>Jul</div><div>Aug</div><div>Sep</div>
+          </div>
+          {phases.map((p,i)=>{
+            const left = (p.start/6)*100;
+            const w = ((p.end-p.start)/6)*100;
+            return (
+              <div key={i} className="tl-row">
+                <div className="tl-bar" style={{width:w+'%',marginLeft:left+'%',background:p.color,color:p.color==='#F4EEE3'?'#000':'#fff'}} onClick={()=>setActive(i)}>
+                  <div className="lbl" style={{color:p.color==='#F4EEE3'?'#000':'#fff'}}>
+                    {p.name}
+                    <span className="dates" style={{marginLeft:12,color:p.color==='#F4EEE3'?'#000':'#fff',opacity:.7}}>{p.date}</span>
+                  </div>
+                </div>
+                {active===i && <div className="tl-detail">{p.detail}</div>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ---------- compliance ---------- */
+const Compliance = () => {
+  const items = [
+    {b:'DATA RESIDENCY',t:'U.S. region',p:'Admin-controlled data residency in the U.S. for recordings, transcripts, and metadata.'},
+    {b:'ENCRYPTION',t:'In-transit & at-rest',p:'TLS 1.2+ in transit, AES-256 at rest. End-to-end encryption available for meetings where policy requires it.'},
+    {b:'AI GOVERNANCE',t:'Data stays yours',p:'Zoom does not train external models on customer data. Admin-controlled redaction and regional storage.'},
+    {b:'IDENTITY',t:'Single sign-on',p:'SSO, branded portals, managed domains. Unifies with Roadmaster\'s existing identity estate.'},
+  ];
+  return (
+    <section>
+      <div className="wrap">
+        <div className="reveal">
+          <div className="eyebrow">Security posture</div>
+          <h2 className="sec-h">Compliance by contract,<br/>not by compensating control.</h2>
+        </div>
+        <div className="compliance">
+          {items.map(it=>(
+            <div key={it.b} className="comp reveal">
+              <div className="badge">{it.b}</div>
+              <h4>{it.t}</h4>
+              <p>{it.p}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ---------- decision ---------- */
+const Decision = () => (
+  <section className="decision" id="decision">
+    <div className="wrap">
+      <div className="eyebrow">The decision on the table</div>
+      <h2>Sign Elite,<br/>Go live <em>September 1,</em><br/>Cut the cord <em>September 26.</em></h2>
+      <p className="sub">One platform. One contract. One admin console. A dispatch floor that can hear itself think, and a CFO who'll thank you next April.</p>
+        <div className="contacts" style={{marginTop:20}}>
+        <div className="c"><div className="n">Michael Fisk</div><div className="r">VP of IT · Roadmaster</div></div>
+        <div className="c"><div className="n">Mitchell Villa</div><div className="r">Director of IT · Roadmaster</div></div>
+        <div className="c"><div className="n">Tracy Carlton</div><div className="r">Network Admin · Roadmaster</div></div>
+        <div className="c"><div className="n">Drake Meznarich</div><div className="r">Zoom AE</div></div>
+        <div className="c"><div className="n">Daniel Beckworth</div><div className="r">White Oak</div></div>
+      </div>
+    </div>
+  </section>
+);
+
+/* ---------- footer ---------- */
+const Footer = () => (
+  <footer>
+    <div>Prepared for Roadmaster Group · Executive Business Case · Confidential</div>
+    <div className="mono">v1.0 · {new Date().toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}</div>
+  </footer>
+);
+
+/* ---------- Tweaks panel ---------- */
+const Tweaks = ({state,setState,visible}) => {
+  if(!visible) return null;
+  const swatches = ['#C8102E','#0B5CFF','#E8A33D','#8DD35F','#B794F4'];
+  const fonts = ['Archivo Narrow','Oswald','Bebas Neue','Inter'];
+  return (
+    <div className={'tweaks on'}>
+      <h4>Tweaks</h4>
+      <label>Accent color</label>
+      <div className="swatch-row">
+        {swatches.map(s=>(
+          <div key={s} className={'swatch '+(state.accent===s?'on':'')} style={{background:s}} onClick={()=>setState({...state,accent:s})}/>
+        ))}
+      </div>
+      <label>Display font</label>
+      <select value={state.display_font} onChange={e=>setState({...state,display_font:e.target.value})}>
+        {fonts.map(f=><option key={f} value={f}>{f}</option>)}
+      </select>
+      <label>ROI posture default</label>
+      <select value={state.roi_preset} onChange={e=>setState({...state,roi_preset:e.target.value})}>
+        <option value="conservative">Conservative</option>
+        <option value="balanced">Balanced</option>
+        <option value="aggressive">Aggressive</option>
+      </select>
+      <label className="tw-toggle">
+        <input type="checkbox" checked={state.show_ringcentral} onChange={e=>setState({...state,show_ringcentral:e.target.checked})}/>
+        Show RingCentral comparison column
+      </label>
+    </div>
+  );
+};
+
+/* ---------- App ---------- */
+const App = () => {
+  useReveal();
+  const [tweakState,setTweakState] = useState(window.TWEAK_DEFAULTS || {accent:'#C8102E',display_font:'Archivo Narrow',show_ringcentral:true,roi_preset:'balanced'});
+  const [tweaksVisible,setTweaksVisible] = useState(false);
+
+  // scroll progress
+  useEffect(()=>{
+    const h = ()=>{ const s = window.scrollY; const d = document.body.scrollHeight-window.innerHeight; document.getElementById('progress').style.width = Math.min(100,(s/d)*100)+'%'; };
+    window.addEventListener('scroll',h,{passive:true}); return ()=>window.removeEventListener('scroll',h);
+  },[]);
+
+  // apply tweaks
+  useEffect(()=>{
+    document.documentElement.style.setProperty('--rm-red',tweakState.accent);
+    document.querySelectorAll('h1.hero-h,h2.sec-h').forEach(el=>{ el.style.fontFamily = `'${tweakState.display_font}', Impact, sans-serif`; });
+  },[tweakState]);
+
+  // tweaks host protocol
+  useEffect(()=>{
+    const handler = (ev)=>{
+      if(ev.data?.type==='__activate_edit_mode') setTweaksVisible(true);
+      if(ev.data?.type==='__deactivate_edit_mode') setTweaksVisible(false);
+    };
+    window.addEventListener('message',handler);
+    window.parent.postMessage({type:'__edit_mode_available'},'*');
+    return ()=>window.removeEventListener('message',handler);
+  },[]);
+
+  // persist tweaks
+  useEffect(()=>{
+    window.parent.postMessage({type:'__edit_mode_set_keys',edits:tweakState},'*');
+  },[tweakState]);
+
+  return (
+    <>
+      <Nav/>
+      <Hero/>
+      <ProblemStrip/>
+      <WhyZoom/>
+      <EliteCompare showRC={tweakState.show_ringcentral}/>
+      <ROI/>
+      <TCO showRC={tweakState.show_ringcentral}/>
+      <Timeline/>
+      <Compliance/>
+      <Decision/>
+      <Footer/>
+      <Tweaks state={tweakState} setState={setTweakState} visible={tweaksVisible}/>
+    </>
+  );
+};
+
+window.TWEAK_STATE = window.TWEAK_DEFAULTS;
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

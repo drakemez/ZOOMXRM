@@ -410,11 +410,12 @@ const Hero = () => {
   const [seats,setSeats] = useState(0);
   const [cc,setCc] = useState(0);
   const [trucks,setTrucks] = useState(0);
+  const [dids,setDids] = useState(0);
   useEffect(()=>{
-    let s=0,c=0,t=0; const id=setInterval(()=>{
-      if(s<240)s+=5; if(c<70)c+=1; if(t<700)t+=14;
-      setSeats(Math.min(240,s));setCc(Math.min(70,c));setTrucks(Math.min(700,t));
-      if(s>=240&&c>=70&&t>=700)clearInterval(id);
+    let s=0,c=0,t=0,d=0; const id=setInterval(()=>{
+      if(s<240)s+=5; if(c<70)c+=1; if(t<700)t+=14; if(d<130)d+=3;
+      setSeats(Math.min(240,s));setCc(Math.min(70,c));setTrucks(Math.min(700,t));setDids(Math.min(130,d));
+      if(s>=240&&c>=70&&t>=700&&d>=130)clearInterval(id);
     },24);
     return ()=>clearInterval(id);
   },[]);
@@ -427,7 +428,7 @@ const Hero = () => {
           <div className="hero-left">
             <div className="chip"><span className="dot"></span>Michael Fisk, VP of IT · Executive Business Case</div>
             <h1 className="hero-h">Driving Excellence<br/>deserves a <span className="hero-red">communications<br/>platform</span> that<br/>can keep up.</h1>
-            <p className="lede">A 42-month case for consolidating Roadmaster Group's 240 Workplace users and 70 dispatch agents onto a single, AI-enabled communications platform — with Zoom Contact Center Elite as the force-multiplier for your fleet operations.</p>
+            <p className="lede">A 42-month case for consolidating Roadmaster Group's 240 Workplace users, 130 additional DIDs, and 70 dispatch agents onto a single, AI-enabled communications platform — with Zoom Contact Center Elite as the force-multiplier for your fleet operations.</p>
             <div className="hero-cta">
               <button className="btn btn-red" onClick={()=>document.getElementById('roi').scrollIntoView({behavior:'smooth'})}>See the ROI →</button>
               <button className="btn btn-ghost" onClick={()=>document.getElementById('elite').scrollIntoView({behavior:'smooth'})}>Why Elite, not Essentials</button>
@@ -438,6 +439,7 @@ const Hero = () => {
             <div className="stat-row" style={{marginTop:16}}>
               <div className="stat"><div className="v">{seats}</div><div className="l">Workplace seats</div></div>
               <div className="stat"><div className="v">{cc}</div><div className="l">Contact center agents</div></div>
+              <div className="stat"><div className="v">{dids}</div><div className="l">Additional DIDs</div></div>
             </div>
             <div className="ticker">
               <div className="ticker-row"><span className="k">Fleet</span><span className="v">{trucks}+ trucks · 2,500 trailers</span></div>
@@ -534,12 +536,12 @@ const EliteCompare = ({showRC}) => {
     {k:'Workforce Management',e:'Included',s:'$20 / agent add-on',rc:'Separate tool',hl:'elite'},
     {k:'Open APIs for line-of-business integrations',e:true,s:true,rc:'Custom'},
     {k:'AI Virtual Agent option',e:true,s:true,rc:false},
-    {k:'84 toll-free + 20 local numbers',e:'Included',s:'Included',rc:'Metered'},
+    {k:'130 Additional DIDs',e:'Included',s:'Included',rc:'Metered'},
   ];
   // Numbers from Roadmaster BOM v4 (Apr 2026). 240 Workplace seats, 70 CC agents, 150 additional DIDs.
   const totals = {
-    elite:      {grand:11923.50, free:95388,  disc:216000, allIn:311388,   freeMo:8},
-    essentials: {grand:8843.50,  free:44217.5,disc:155880, allIn:200097.5, freeMo:5}
+    elite:      {grand:11953.50, free:95628,  disc:214920, allIn:310548,   freeMo:8},
+    essentials: {grand:8783.50,  free:43917.5,disc:154440, allIn:198357.5, freeMo:5}
   };
   const t = totals[plan];
   return (
@@ -569,10 +571,10 @@ const EliteCompare = ({showRC}) => {
               {plan==='essentials' && <span className="chip" style={{borderColor:'var(--rm-red)',color:'var(--rm-red)'}}><span className="dot"/>Selected</span>}
             </div>
             <div className="price">
-              <div className="big">$8,844</div>
+              <div className="big">$8,784</div>
               <div className="per">/ month · all-in</div>
             </div>
-            <div style={{color:'var(--mute)',fontSize:13}}>240 Workplace + 70 CC Essentials agents · 42-month term · 5 months free</div>
+            <div style={{color:'var(--mute)',fontSize:13}}>240 Workplace + 70 CC Essentials agents + 130 DIDs · 42-month term · 5 months free</div>
             <ul style={{listStyle:'none',padding:0,margin:'24px 0 0'}}>
               {rows.map((r,i)=>(
                 <div key={i} className={'feat '+(r.s===true?'yes':r.s===false?'no':'yes')}>
@@ -592,10 +594,10 @@ const EliteCompare = ({showRC}) => {
               {plan==='elite' && <span className="chip" style={{borderColor:'var(--rm-red)',color:'var(--rm-red)'}}><span className="dot"/>Selected</span>}
             </div>
             <div className="price">
-              <div className="big">$11,924</div>
+              <div className="big">$11,954</div>
               <div className="per">/ month · all-in</div>
             </div>
-            <div style={{color:'var(--mute)',fontSize:13}}>240 Workplace + 70 CC Elite agents · 42-month term · 8 months free</div>
+            <div style={{color:'var(--mute)',fontSize:13}}>240 Workplace + 70 CC Elite agents + 130 DIDs · 42-month term · 8 months free</div>
             <ul style={{listStyle:'none',padding:0,margin:'24px 0 0'}}>
               {rows.map((r,i)=>(
                 <div key={i} className={'feat '+(r.hl==='elite'?'new':(r.e===true?'yes':r.e===false?'no':'yes'))}>
@@ -611,7 +613,7 @@ const EliteCompare = ({showRC}) => {
           <div>
             <div className="num">${(t.allIn/1000).toFixed(1)}K</div>
             <div className="lbl">Concessions on {plan === 'elite' ? 'Elite' : 'Essentials'} over the 42-month term</div>
-            <p style={{color:'var(--mute)',fontSize:13,marginTop:16,maxWidth:'40ch'}}>Zoom's negotiated value on the {plan === 'elite' ? 'Elite' : 'Essentials'} bundle. The delta between plans — ${(311388-200097.5).toLocaleString(undefined,{maximumFractionDigits:0})} — reflects the additional concessions Zoom applied to land Elite at a price Roadmaster can defend to the board.</p>
+            <p style={{color:'var(--mute)',fontSize:13,marginTop:16,maxWidth:'40ch'}}>Zoom's negotiated value on the {plan === 'elite' ? 'Elite' : 'Essentials'} bundle. The delta between plans — ${(310548-198357.5).toLocaleString(undefined,{maximumFractionDigits:0})} — reflects the additional concessions Zoom applied to land Elite at a price Roadmaster can defend to the board.</p>
           </div>
           <div>
             <div className="split">
@@ -786,7 +788,7 @@ const TCO = ({showRC}) => {
       tag:'Tier 02',
       label:'Phone + CX Standard',
       rc:{pkg:'RingCentral Phone + CX Standard', mo:15050},
-      zoom:{pkg:'ZWBP + Contact Center Essentials', mo:8843.50, term:318366, free:44217.5, disc:155880, concAll:200097.5, freeMo:5},
+      zoom:{pkg:'ZWBP + Contact Center Essentials', mo:8783.50, term:316206, free:43917.5, disc:154440, concAll:198357.5, freeMo:5},
     },
     {
       id:'eli',
@@ -794,7 +796,7 @@ const TCO = ({showRC}) => {
       label:'Phone + CX Elite',
       recommended:true,
       rc:{pkg:'RingCentral Phone + CX Elite', mo:20650},
-      zoom:{pkg:'ZWBP + Contact Center Elite', mo:11923.50, term:429246, free:95388, disc:216000, concAll:311388, freeMo:8},
+      zoom:{pkg:'ZWBP + Contact Center Elite', mo:11953.50, term:430326, free:95628, disc:214920, concAll:310548, freeMo:8},
     },
     {
       id:'caic',

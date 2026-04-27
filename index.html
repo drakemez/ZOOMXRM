@@ -157,7 +157,12 @@
   .preset:hover{color:var(--rm-bone)}
   .preset.on{background:var(--rm-bone);color:var(--ink);border-color:var(--rm-bone)}
   /* TCO - side by side interactive */
-  .tco-tiers{margin-top:40px;display:flex;gap:10px;flex-wrap:wrap}
+  .tco-month{margin-top:32px;display:inline-flex;gap:0;border:1px solid var(--line-2);border-radius:3px;overflow:hidden;background:var(--ink-2)}
+  .tco-month button{background:transparent;color:var(--mute);font-family:inherit;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;padding:10px 18px;border:0;cursor:pointer;border-right:1px solid var(--line-2)}
+  .tco-month button:last-child{border-right:0}
+  .tco-month button.on{background:var(--rm-red);color:#fff}
+  .tco-month .lift{font-size:10px;opacity:.78;margin-left:6px;letter-spacing:.12em}
+  .tco-tiers{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
   .tco-tier{position:relative;background:var(--ink-2);border:1px solid var(--line);color:var(--mute);padding:16px 20px;cursor:pointer;border-radius:3px;font-family:inherit;text-align:left;min-width:200px;flex:1;transition:all .15s}
   .tco-tier:hover{border-color:var(--line-2);color:var(--rm-bone)}
   .tco-tier.on{background:var(--ink);border-color:var(--rm-red);color:var(--rm-bone);box-shadow:inset 3px 0 0 var(--rm-red)}
@@ -371,7 +376,6 @@ const Nav = () => {
     ['problem','The Problem'],
     ['why','Why Zoom'],
     ['elite','Elite Upgrade'],
-    ['roi','ROI'],
     ['tco','Total Cost'],
     ['timeline','Timeline'],
     ['decision','Decision']
@@ -430,7 +434,7 @@ const Hero = () => {
             <h1 className="hero-h">Driving Excellence<br/>deserves a <span className="hero-red">communications<br/>platform</span> that<br/>can keep up.</h1>
             <p className="lede">A 42-month case for consolidating Roadmaster Group's 240 Workplace users, 130 additional DIDs, and 70 dispatch agents onto a single, AI-enabled communications platform — with Zoom Contact Center Elite as the force-multiplier for your fleet operations.</p>
             <div className="hero-cta">
-              <button className="btn btn-red" onClick={()=>document.getElementById('roi').scrollIntoView({behavior:'smooth'})}>See the ROI →</button>
+              <button className="btn btn-red" onClick={()=>document.getElementById('tco').scrollIntoView({behavior:'smooth'})}>See the savings →</button>
               <button className="btn btn-ghost" onClick={()=>document.getElementById('elite').scrollIntoView({behavior:'smooth'})}>Why Elite, not Essentials</button>
             </div>
           </div>
@@ -531,9 +535,9 @@ const EliteCompare = ({showRC}) => {
     {k:'Voice · Video · Chat · SMS channels',e:true,s:true,rc:true},
     {k:'Email channel',e:true,s:false,rc:'Add-on'},
     {k:'Social channels',e:true,s:false,rc:false},
-    {k:'Quality Management',e:'Included',s:'$60 / agent add-on',rc:'Add-on',hl:'elite'},
+    {k:'Quality Management (post-call coaching and real-time + post-mortem analytics)',e:'Included',s:'$60 / agent add-on',rc:'Add-on',hl:'elite'},
     {k:'AI Expert Assist (real-time agent coaching)',e:'Included',s:'$40 / agent add-on',rc:false,hl:'elite'},
-    {k:'Workforce Management',e:'Included',s:'$20 / agent add-on',rc:'Separate tool',hl:'elite'},
+    {k:'Workforce Management (AI-powered volumetric scheduling assist, ToD/seasonality analysis)',e:'Included',s:'$20 / agent add-on',rc:'Separate tool',hl:'elite'},
     {k:'Open APIs for line-of-business integrations',e:true,s:true,rc:'Custom'},
     {k:'AI Virtual Agent option',e:true,s:true,rc:false},
     {k:'130 Additional DIDs',e:'Included',s:'Included',rc:'Metered'},
@@ -629,157 +633,17 @@ const EliteCompare = ({showRC}) => {
   );
 };
 
-/* ---------- ROI calculator ---------- */
-const ROI = () => {
-  const presets = {
-    conservative:{ahtPct:5,fcrPct:3,attritionPct:10,superPct:5},
-    balanced:{ahtPct:12,fcrPct:8,attritionPct:25,superPct:15},
-    aggressive:{ahtPct:20,fcrPct:15,attritionPct:40,superPct:25},
-  };
-  const [preset,setPreset] = useState(window.TWEAK_STATE?.roi_preset || 'balanced');
-  const [ahtPct,setAht] = useState(presets.balanced.ahtPct);
-  const [fcrPct,setFcr] = useState(presets.balanced.fcrPct);
-  const [attr,setAttr] = useState(presets.balanced.attritionPct);
-  const [sup,setSup] = useState(presets.balanced.superPct);
-
-  const applyPreset = (p) => { setPreset(p); setAht(presets[p].ahtPct); setFcr(presets[p].fcrPct); setAttr(presets[p].attritionPct); setSup(presets[p].superPct); };
-
-  // Assumptions (fully visible to the VP)
-  const AGENTS = 70;
-  const SUPERVISORS = 6;
-  const AGENT_LOAD = 95000; // fully loaded annual
-  const SUP_LOAD = 135000;
-  const ATTRITION_BASE = 0.28; // industry
-  const REPLACEMENT_COST = 18000;
-  const CALLS_PER_DAY_PER_AGENT = 55;
-  const BUSINESS_DAYS = 250;
-  const AVG_CALL_MIN = 6.2;
-  const AGENT_HR_COST = AGENT_LOAD/(250*8);
-
-  const totals = useMemo(()=>{
-    // 1) AHT reduction via Expert Assist (Elite)
-    const totalMinutes = CALLS_PER_DAY_PER_AGENT*AGENTS*BUSINESS_DAYS*AVG_CALL_MIN;
-    const minutesSaved = totalMinutes * (ahtPct/100);
-    const ahtSavings = (minutesSaved/60) * AGENT_HR_COST;
-
-    // 2) FCR lift: fewer repeat calls → capacity recovered
-    const repeatCallReductionPct = fcrPct/100;
-    const callsPerYear = CALLS_PER_DAY_PER_AGENT*AGENTS*BUSINESS_DAYS;
-    const callsAvoided = callsPerYear*0.18*repeatCallReductionPct; // 18% base repeat rate
-    const fcrSavings = callsAvoided*AVG_CALL_MIN/60*AGENT_HR_COST;
-
-    // 3) Attrition reduction via QM + WFM + better tooling
-    const attritionReduction = ATTRITION_BASE*(attr/100);
-    const agentsRetained = AGENTS*attritionReduction;
-    const attritionSavings = agentsRetained*REPLACEMENT_COST;
-
-    // 4) Supervisor productivity via QM automation + unified admin
-    const supProductivity = SUPERVISORS*SUP_LOAD*(sup/100);
-
-    // 5) RingCentral baseline avoided + admin consolidation
-    // Assume RC + separate CC platform costs ~$15k/mo
-    const platformConsolidation = (15000-12869.50)*12;
-
-    const total = ahtSavings+fcrSavings+attritionSavings+supProductivity+platformConsolidation;
-    const eliteAnnual = 12869.50*12;
-    const paybackMonths = eliteAnnual/(total/12);
-    return {ahtSavings,fcrSavings,attritionSavings,supProductivity,platformConsolidation,total,paybackMonths};
-  },[ahtPct,fcrPct,attr,sup]);
-
-  const fmt = n => '$'+Math.round(n).toLocaleString();
-
-  return (
-    <section id="roi">
-      <div className="wrap">
-        <div className="reveal">
-          <div className="eyebrow">VP of IT, here's the math</div>
-          <h2 className="sec-h">ROI calculator —<br/>every assumption visible,<br/>every lever yours.</h2>
-          <p className="lede">No black-box business case. Adjust the four levers Elite actually pulls, and watch the first-year impact recompute. Defaults are the middle of peer trucking contact-center benchmarks.</p>
-        </div>
-
-        <div className="roi-wrap">
-          <div className="roi-controls reveal">
-            <div className="eyebrow" style={{color:'var(--mute)'}}>Choose a posture</div>
-            <div className="preset-row" style={{marginTop:12}}>
-              {Object.keys(presets).map(p=>(
-                <button key={p} className={'preset '+(preset===p?'on':'')} onClick={()=>applyPreset(p)}>{p}</button>
-              ))}
-            </div>
-
-            <div className="roi-row">
-              <div className="label"><span className="name">AHT reduction from AI Expert Assist</span><span className="val">−{ahtPct}%</span></div>
-              <input type="range" min="0" max="25" value={ahtPct} onChange={e=>{setAht(+e.target.value);setPreset('custom')}}/>
-              <div className="desc">Real-time agent coaching on live load-status and dispatch calls. Peer Elite benchmarks: 8–18%.</div>
-            </div>
-
-            <div className="roi-row">
-              <div className="label"><span className="name">First-call resolution lift</span><span className="val">+{fcrPct}%</span></div>
-              <input type="range" min="0" max="20" value={fcrPct} onChange={e=>{setFcr(+e.target.value);setPreset('custom')}}/>
-              <div className="desc">Unified knowledge base and AI Companion surface answers inside the agent desktop.</div>
-            </div>
-
-            <div className="roi-row">
-              <div className="label"><span className="name">Agent attrition reduction</span><span className="val">−{attr}%</span></div>
-              <input type="range" min="0" max="50" value={attr} onChange={e=>{setAttr(+e.target.value);setPreset('custom')}}/>
-              <div className="desc">Quality Management + Workforce Management reduce the two top churn drivers — unfair scheduling and opaque coaching. Industry attrition baseline: 28%.</div>
-            </div>
-
-            <div className="roi-row">
-              <div className="label"><span className="name">Supervisor productivity gain</span><span className="val">+{sup}%</span></div>
-              <input type="range" min="0" max="35" value={sup} onChange={e=>{setSup(+e.target.value);setPreset('custom')}}/>
-              <div className="desc">QM automation eliminates 100%-manual call sampling. 6 supervisors × recovered hours.</div>
-            </div>
-
-            <div style={{marginTop:20,paddingTop:20,borderTop:'1px solid var(--line)'}}>
-              <div className="eyebrow" style={{color:'var(--mute)'}}>Fixed assumptions</div>
-              <ul className="kv-list">
-                <li><span className="k">Agents · Supervisors</span><span className="v">70 · 8</span></li>
-                <li><span className="k">Calls / agent / day</span><span className="v">55 @ 6.2 min AHT</span></li>
-                <li><span className="k">Fully-loaded agent cost</span><span className="v">$95,000</span></li>
-                <li><span className="k">Agent replacement cost</span><span className="v">$18,000</span></li>
-                <li><span className="k">Baseline attrition</span><span className="v">28% / yr</span></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="roi-results reveal">
-            <div className="eyebrow" style={{color:'var(--rm-bone)'}}>Year-1 Elite value delivered</div>
-            <div className="roi-total"><span className="cur">$</span>{Math.round(totals.total).toLocaleString()}</div>
-            <div className="roi-label">Annualized benefit vs. staying on RingCentral + Essentials</div>
-
-            <div className="roi-breakdown">
-              <div className="roi-bd-row"><span className="k">AHT reduction (Expert Assist)</span><span className="v">{fmt(totals.ahtSavings)}</span></div>
-              <div className="roi-bd-row"><span className="k">FCR lift</span><span className="v">{fmt(totals.fcrSavings)}</span></div>
-              <div className="roi-bd-row"><span className="k">Attrition reduction (QM + WFM)</span><span className="v">{fmt(totals.attritionSavings)}</span></div>
-              <div className="roi-bd-row"><span className="k">Supervisor productivity</span><span className="v">{fmt(totals.supProductivity)}</span></div>
-              <div className="roi-bd-row"><span className="k">Platform consolidation vs RC</span><span className="v">{fmt(totals.platformConsolidation)}</span></div>
-            </div>
-
-            <div className="roi-payback">
-              <span className="k">Payback period on Elite</span>
-              <span className="v">{isFinite(totals.paybackMonths)?totals.paybackMonths.toFixed(1):'—'} mo</span>
-            </div>
-
-            <div style={{fontSize:12,color:'var(--mute-2)',marginTop:20,lineHeight:1.6}}>
-              Conservative methodology. Excludes soft benefits (driver satisfaction, dispatcher retention halo, security-incident avoidance). Based on Zoom Elite customer case studies in trucking & 3PL verticals.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
 /* ---------- TCO ---------- */
 const TCO = ({showRC}) => {
   // Pricing from Roadmaster BOM v4 "Side by Side" tab (Apr 2026)
   // Zoom columns include 42-month term totals, concessions, and free months from the BOM's
   // Zoom Workplace / ESSENTIALS / ELITE / ELITE+CAIC sheets.
-  const tiers = [
+  const tiersBase = [
     {
       id:'phone',
       tag:'Tier 01',
       label:'Phone Only',
+      mayMult:1.15,
       rc:{pkg:'RingCentral Phone (current)', mo:10500},
       zoom:{pkg:'Zoom Workplace Business Plus', mo:4450, term:160200, free:22250, disc:82080, concAll:104330, freeMo:5},
     },
@@ -787,6 +651,7 @@ const TCO = ({showRC}) => {
       id:'ess',
       tag:'Tier 02',
       label:'Phone + CX Standard',
+      mayMult:1.14,
       rc:{pkg:'RingCentral Phone + CX Standard', mo:15050},
       zoom:{pkg:'ZWBP + Contact Center Essentials', mo:8783.50, term:316206, free:43917.5, disc:154440, concAll:198357.5, freeMo:5},
     },
@@ -795,6 +660,7 @@ const TCO = ({showRC}) => {
       tag:'Tier 03',
       label:'Phone + CX Elite',
       recommended:true,
+      mayMult:1.13,
       rc:{pkg:'RingCentral Phone + CX Elite', mo:20650},
       zoom:{pkg:'ZWBP + Contact Center Elite', mo:11953.50, term:430326, free:95628, disc:214920, concAll:310548, freeMo:8},
     },
@@ -802,10 +668,27 @@ const TCO = ({showRC}) => {
       id:'caic',
       tag:'Tier 04',
       label:'Elite + Custom AI Companion',
+      mayMult:1.12,
       rc:{pkg:'RingCentral Phone + Elite + CAIC', mo:null},
       zoom:{pkg:'ZWBP + Elite + Custom AI Companion', mo:14223.50, term:512046, free:113788, disc:288720, concAll:402508, freeMo:8},
     },
   ];
+  const [priceMonth,setPriceMonth] = useState('apr'); // 'apr' | 'may'
+  const tiers = tiersBase.map(t => {
+    const m = priceMonth === 'may' ? t.mayMult : 1;
+    return {
+      ...t,
+      rc:{...t.rc, mo: t.rc.mo},
+      zoom:{
+        ...t.zoom,
+        mo: Math.round(t.zoom.mo*m*100)/100,
+        term: Math.round(t.zoom.term*m),
+        free: Math.round(t.zoom.free*m),
+        disc: Math.round(t.zoom.disc*m),
+        concAll: Math.round(t.zoom.concAll*m),
+      },
+    };
+  });
   const [active,setActive] = useState('eli');
   const tier = tiers.find(t=>t.id===active);
   const monthlyDelta = tier.rc.mo!=null ? tier.rc.mo - tier.zoom.mo : null;
@@ -821,6 +704,11 @@ const TCO = ({showRC}) => {
           <div className="eyebrow">Total cost of ownership · 42-month term</div>
           <h2 className="sec-h">Same capability.<br/><span style={{color:'var(--rm-red)'}}>Less money.</span> Every month.</h2>
           <p className="lede">Pick any tier of capability. Zoom comes in under RingCentral at every level — and the recommended Elite tier unlocks QM, AI Expert Assist, and Workforce Management that RingCentral either bolts on separately or can't match.</p>
+        </div>
+
+        <div className="tco-month reveal" role="tablist" aria-label="Pricing period">
+          <button className={priceMonth==='apr'?'on':''} onClick={()=>setPriceMonth('apr')}>April pricing</button>
+          <button className={priceMonth==='may'?'on':''} onClick={()=>setPriceMonth('may')}>May pricing</button>
         </div>
 
         <div className="tco-tiers reveal">
@@ -1106,7 +994,6 @@ const App = () => {
       <ProblemStrip/>
       <WhyZoom/>
       <EliteCompare showRC={tweakState.show_ringcentral}/>
-      <ROI/>
       <TCO showRC={tweakState.show_ringcentral}/>
       <Timeline/>
       <Compliance/>

@@ -1,33 +1,36 @@
-# Fly.io configuration for the Roadmaster × Zoom executive brief.
-# Rename `app` before first deploy (or let `fly launch` do it for you).
+# fly.toml app configuration file generated for zoomxrm on 2026-04-27T23:11:33Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-app = "roadmaster-zoom-brief"
-primary_region = "iad"   # US-East. Change if you'd rather serve from "sjc", "ord", etc.
+app = 'zoomxrm'
+primary_region = 'ord'
 
 [build]
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = "stop"
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
-  processes = ["app"]
+  processes = ['app']
 
   [http_service.concurrency]
-    type = "requests"
-    soft_limit = 200
+    type = 'requests'
     hard_limit = 250
+    soft_limit = 200
 
   [[http_service.checks]]
-    interval = "30s"
-    timeout = "5s"
-    grace_period = "5s"
-    method = "GET"
-    path = "/health"
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '5s'
+    method = 'GET'
+    path = '/health'
 
 [[vm]]
-  size = "shared-cpu-1x"
-  memory = "256mb"
-  cpu_kind = "shared"
+  size = 'shared-cpu-1x'
+  memory = '256mb'
+  cpu_kind = 'shared'
   cpus = 1
+  memory_mb = 256
